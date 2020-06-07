@@ -1,47 +1,43 @@
-// Copyright (c) 2020 KineApps. All rights reserved.
-//
-// This source code is licensed under the BSD-style license found in the
-// LICENSE file in the root directory of this source tree.
-
 import Flutter
 import UIKit
 
 public class SwiftFlutterFileDialogPlugin: NSObject, FlutterPlugin {
-    public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "flutter_file_dialog", binaryMessenger: registrar.messenger())
-        let instance = SwiftFlutterFileDialogPlugin()
-        registrar.addMethodCallDelegate(instance, channel: channel)
-    }
+  public static func register(with registrar: FlutterPluginRegistrar) {
+    let channel = FlutterMethodChannel(name: "flutter_file_dialog", binaryMessenger: registrar.messenger())
+    let instance = SwiftFlutterFileDialogPlugin()
+    registrar.addMethodCallDelegate(instance, channel: channel)
+  }
 
-    deinit {
-        writeLog("SwiftFlutterFileDialogPlugin.deinit")
-    }
+  deinit {
+      writeLog("SwiftFlutterFileDialogPlugin.deinit")
+  }
 
-    var openFileDialog: OpenFileDialog?
-    var saveFileDialog: SaveFileDialog?
+  var openFileDialog: OpenFileDialog?
+  var saveFileDialog: SaveFileDialog?
 
-    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        writeLog(call.method)
-        guard let args = call.arguments as? [String: Any] else {
-            result(FlutterError(code: "invalid_args", message: nil, details: nil))
-            return
-        }
-        switch call.method {
-        case "pickFile":
-            openFileDialog = OpenFileDialog()
-            let params = OpenFileDialogParams(data: args)
-            openFileDialog!.pickFile(params, result: result)
+  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+      writeLog(call.method)
+      guard let args = call.arguments as? [String: Any] else {
+          result(FlutterError(code: "invalid_args", message: nil, details: nil))
+          return
+      }
+      switch call.method {
+      case "pickFile":
+          openFileDialog = OpenFileDialog()
+          let params = OpenFileDialogParams(data: args)
+          openFileDialog!.pickFile(params, result: result)
 
-        case "saveFile":
-            saveFileDialog = SaveFileDialog()
-            let params = SaveFileDialogParams(data: args)
-            saveFileDialog!.saveFile(params, result: result)
+      case "saveFile":
+          saveFileDialog = SaveFileDialog()
+          let params = SaveFileDialogParams(data: args)
+          saveFileDialog!.saveFile(params, result: result)
 
-        default:
-            result(FlutterMethodNotImplemented)
-        }
-    }
+      default:
+          result(FlutterMethodNotImplemented)
+      }
+  }
 }
+
 
 struct OpenFileDialogParams {
     let dialogType: OpenFileDialogType
